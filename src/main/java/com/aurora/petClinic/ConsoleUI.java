@@ -52,6 +52,32 @@ public class ConsoleUI {
                     System.out.println("Добавлен клиент "+nameClient+" c "+ petType+" "+namePet); //TODO add to SLF4J
                     break;
 
+                case ("add_pet"):
+                    System.out.println("Введите имя клиента:");
+                    String clientName = bufferedReader.readLine();
+                    client = clinic.searchClient(clientName);
+                    if (client == null) {
+                        System.out.println("Клиент не найден, создаю нового.");
+                        client = new Client(clientName);
+                        clinic.addClient(client);
+                    }
+                    System.out.println("Введите имя питомца:");
+                    String petName = bufferedReader.readLine();
+                    System.out.println("Введите тип питомца:");
+                    petType = bufferedReader.readLine();
+                    switch (petType.toLowerCase()) {
+                        case "cat":
+                            client.addPet(new Cat(petName));
+                            System.out.println("Животина типа Кот добавлена.");
+                            break;
+                        case "dog":
+                            client.addPet(new Dog(petName));
+                            System.out.println("Животина типа Пес добавлена.");
+                            break;
+                        default:
+                            System.out.println("Таких животных не лечим!");
+                    }
+
 
                 case "search_client":
                     System.out.println("Введите имя клиента для поиска");
