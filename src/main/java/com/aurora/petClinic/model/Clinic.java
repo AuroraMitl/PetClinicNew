@@ -8,10 +8,7 @@ import java.util.ArrayList;
 
 public class Clinic {
 
-    ConsoleUI consoleUI=new ConsoleUI();
-    Client client =new Client();
-
-    ArrayList<Client> clientsList = new ArrayList<Client>();
+    private ArrayList<Client> clientsList = new ArrayList<>();
 
     public ArrayList<Client> getClientsList() {
         return clientsList;
@@ -21,8 +18,12 @@ public class Clinic {
         this.clientsList = clientsList;
     }
 
-    public  void addClient(Client client) {
+    public void addClient(Client client) {
         this.clientsList.add(client);
+    }
+
+    public void delClient (Client client) {
+        this.clientsList.remove(client);
     }
 
     public Client searchClient(String nameClient) {
