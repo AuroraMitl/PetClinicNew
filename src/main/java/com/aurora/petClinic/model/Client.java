@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public class Client {
 
-
-
     private  String name;
     private String petName;
 
@@ -14,17 +12,15 @@ public class Client {
     public Client() {
 
     }
-
     public Client(String name) {
         this.name = name;
-
     }
-
     public String getName(){
         return name;
     }
-
-
+    public void setName(String name){
+        this.name=name;
+    }
 
     public ArrayList<Pet> getPetsList() {
         return petsList;
@@ -34,11 +30,11 @@ public class Client {
         this.petsList=petsList;
     }
 
-
     public void addPet(Pet pet) throws NullPointerException {
 
         this.petsList.add(pet);
     }
+
 
 
     @Override
@@ -47,6 +43,9 @@ public class Client {
                 + ", список животных=" + petsList + "]";
     }
 
+    public int compareToIgnoreCase(Client s2) {
+        return petsList.indexOf(s2);
+    }
 }
 
 
