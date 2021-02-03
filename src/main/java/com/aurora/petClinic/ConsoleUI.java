@@ -20,10 +20,6 @@ public class ConsoleUI {
 
         System.out.println(clinic);
 
-        //Clinic clinic = new Clinic();
-
-        // Client client=new Client();
-
         System.out.println("Здравствуйте! Мы рады Вас приветствовать в нашей клинике!\nЕсли Вы хотите записаться на прием со своим питомцем, то введите команду :");
         boolean flag=true;
         while(flag) {
