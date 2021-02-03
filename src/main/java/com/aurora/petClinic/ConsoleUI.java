@@ -88,17 +88,6 @@ public class ConsoleUI {
                 //(без добавления нового, если не найдет существующий(!))
                 case "edit_client":
 
-                 /*   System.out.println("Введите имя клиента для редактирования");
-                    String name = bufferedReader.readLine();
-
-                    client = clinic.searchClient(name);
-
-                    String newName=null;
-                    System.out.println("Введите новое имя для клиента "+client.getName());
-                    newName = bufferedReader.readLine();
-                    System.out.println("Имя клиента изменено на " + clinic.clientEdit(name, newName));
-*/
-
                     System.out.println("Введите имя клиента для редактирования");
                     String name = bufferedReader.readLine();
                    System.out.println("Введите новое имя клиента");
