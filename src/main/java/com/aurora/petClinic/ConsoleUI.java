@@ -76,7 +76,7 @@ public class ConsoleUI {
 
                 case "outputSort":
 
-                    //clinic.sortClientList();
+
                     System.out.println(clinic.sortClientList());
                     break;
 
