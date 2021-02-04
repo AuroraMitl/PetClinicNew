@@ -80,7 +80,6 @@ public class ConsoleUI {
                     System.out.println(clinic.sortClientList());
                     break;
 
-// 2. редактирование имени существующего клиента
 
                 case "edit_client":
 
