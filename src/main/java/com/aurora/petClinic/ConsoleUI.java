@@ -73,7 +73,7 @@ public class ConsoleUI {
                     clinic.clientListOutput();
 
                     break;
-//output alphabet
+//output alphabet, lists
                 case "outputSort":
 
 
