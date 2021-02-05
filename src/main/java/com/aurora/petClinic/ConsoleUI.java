@@ -73,7 +73,7 @@ public class ConsoleUI {
                     clinic.clientListOutput();
 
                     break;
-//output alphabet, checking, commit
+//output alphabet, checking, commit, why it isnt used??
                 case "outputSort":
 
 
