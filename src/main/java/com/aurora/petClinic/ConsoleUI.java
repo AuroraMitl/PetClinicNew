@@ -76,6 +76,7 @@ public class ConsoleUI {
                         default:
                             System.out.println("Таких животных не лечим!");
                     }
+                    break;
 
                 case "del_client":
                     System.out.println("Введите имя клиента:");
