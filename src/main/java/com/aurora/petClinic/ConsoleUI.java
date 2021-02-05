@@ -2,6 +2,7 @@ package com.aurora.petClinic;
 
 import com.aurora.petClinic.model.*;
 
+import javax.lang.model.util.Types;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -10,11 +11,11 @@ public class ConsoleUI {
 
 
 
+
     public static void main(String []args) throws Exception {
+        Clinic clinic =  Clinic.getInstance();
 
-        Clinic clinic = new Clinic();
-
-        // Client client=new Client();
+        System.out.println(clinic);
 
         System.out.println("Здравствуйте! Мы рады Вас приветствовать в нашей клинике!");
         boolean flag=true;
@@ -22,20 +23,21 @@ public class ConsoleUI {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Введите команду:");
             String string = bufferedReader.readLine();
-            switch (string){
-                case "exit":
-                    flag=false;
+
+            switch (string) {
+                case ("exit"):
+                    flag = false;
                     System.out.println("До Свидания!");
                     break;
 
                 case "add_client":
                     System.out.println("Введите имя клиента: ");
-                    String  nameClient = bufferedReader.readLine();
-                    Client client=new Client(nameClient);
+                    String nameClient = bufferedReader.readLine();
+                    Client client = new Client(nameClient);
                     clinic.addClient(client);
                     System.out.println("Введите кличку животного: ");
                     String namePet = bufferedReader.readLine();
-                    System.out.println("Введите тип питомца : cat, dog or cow");
+                    System.out.println("Введите тип питомца : cat, dog ");
                     String petType = bufferedReader.readLine();
                     if (petType.equals("cat")) {
                         Cat catName = new Cat(namePet);
@@ -46,7 +48,7 @@ public class ConsoleUI {
                     }
                     flag = true;
 
-                    System.out.println("Добавлен клиент "+nameClient+" c "+ petType+" "+namePet); //TODO add to SLF4J
+                    System.out.println("Добавлен клиент " + nameClient + " c " + petType + " " + namePet); //TODO add to SLF4J
                     break;
 
                 case "add_pet":
@@ -109,28 +111,48 @@ public class ConsoleUI {
                 case "search_client":
                     System.out.println("Введите имя клиента для поиска");
                     client = clinic.searchClient(bufferedReader.readLine());
-
-                    //clinic.searchClient(bufferedReader.readLine());
-
-                    if( client==null){
+                    if (client == null) {
                         System.out.println("Клиента нет в списке");
-                    }
-                    else{
+                    } else {
                         System.out.println("Клиент есть в списке");
                         System.out.println(client);
                     }
 
                     break;
+                //4. зарефакторить вывод клиентов с петами, чтобы клиенты выводились по человечески
+                // и в алфавитном порядке! а так же петы у клиентов так же чтобы были упорядочены (по типу пускай)
+
 
                 case "output":
                     clinic.clientListOutput();
+
+                    break;
+//output alphabet, checking, commit, why it isnt used??
+                case "outputSort":
+
+
+                    System.out.println(clinic.sortClientList());
                     break;
 
-                default:
-                    System.out.println("Мы не поняли что вы имеете ввиду");
 
+                case "edit_client":
+
+                    System.out.println("Введите имя клиента для редактирования");
+                    String name = bufferedReader.readLine();
+                   System.out.println("Введите новое имя клиента");
+                    String newName = bufferedReader.readLine();
+                    boolean result = clinic.clientEdit(name, newName);
+                    if (result = false) {
+                        System.out.println(result + "Данного клиента не найдено в базе, смена имени не произведена");
+                    }
+                    else System.out.println("Имя клиента" + name + "изменено на " + newName);
+            break;
+
+            default:
+                System.out.println("Мы не поняли что вы имеете ввиду");
+        }
+        }
             }
         }
-    }
-}
+
 
