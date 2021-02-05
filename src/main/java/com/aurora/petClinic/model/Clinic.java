@@ -7,20 +7,21 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class Clinic {
+  
     private static Clinic instance;
+    private ArrayList<Client> clientsList = new ArrayList<>();
 
-        private Clinic() {
+    private Clinic() {
 
-        }
-        public static Clinic getInstance() {
+    }
+  
+    public static Clinic getInstance() {
 
-            if(instance == null){		//если объект еще не создан, то создаем
+        if(instance == null){		//если объект еще не создан, то создаем
                 instance = new Clinic();	//создать новый объект, если слишком надо
             }
             return instance;		// вернуть созданный объект
         }
-
-    ArrayList<Client> clientsList = new ArrayList<Client>();
 
     public ArrayList<Client> getClientsList() {
 
@@ -41,6 +42,10 @@ public class Clinic {
 
     public void addClient(Client client) {
         this.clientsList.add(client);
+    }
+
+    public void delClient (Client client) {
+        this.clientsList.remove(client);
     }
 
     public Client searchClient(String nameClient) {
