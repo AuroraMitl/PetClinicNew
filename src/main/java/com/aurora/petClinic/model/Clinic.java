@@ -17,21 +17,18 @@ public class Clinic {
   
     public static Clinic getInstance() {
 
-        if(instance == null){		//если объект еще не создан, то создаем
-                instance = new Clinic();	//создать новый объект, если слишком надо
-            }
-            return instance;		// вернуть созданный объект
+        if(instance == null) {		//если объект еще не создан, то создаем
+                instance = new Clinic();	 //создать новый объект, если слишком надо
         }
+        return instance;		// вернуть созданный объект
+    }
 
     public ArrayList<Client> getClientsList() {
-
-      return clientsList;
+        return clientsList;
     }
 
     public ArrayList<Client> sortClientList() {
         clientsList.sort(Comparator.comparing(Client::getName));
-       // System.out.println(clientsList);
-
         return clientsList;
     }
 
@@ -57,21 +54,16 @@ public class Clinic {
         return null;
     }
 
-    public void clientListOutput() {
-        System.out.println(getClientsList());
-
+    public void clientEdit(Client client, String name) {
+        client.setName(name);
     }
 
-    public Boolean clientEdit(String name, String newName) {
+    public String clientsListToString() {
+        StringBuilder clientsListString = new StringBuilder();
         for (Client client : clientsList) {
-
-            if (client.getName().equals(name)) {// если имя клиента равно тому, которое получено, то заменяем имя на новое
-               client.setName(newName);
-                return true;
-            }
+            clientsListString.append("\n").append(client.toString());
         }
-        return null;
-
+        return clientsListString.toString();
     }
 
 
