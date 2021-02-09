@@ -35,14 +35,21 @@ public class Client {
     }
 
     public Pet searchPet (String petName) {
-        for (Pet pet : petsList) {
+
+        return this.petsList.stream()
+                .filter(client -> client.getPetName().equals(petName))
+                .findAny()
+                .orElse(null);
+
+    /*  for (Pet pet : petsList) {
             if (pet.getPetName().equals(petName)) {
                 return pet;
             }
         }
         return null;
     }
-
+*/
+    }
     public String petsListToString() {
         StringBuilder stringPetsList = new StringBuilder();
         for (Pet pet : petsList) {

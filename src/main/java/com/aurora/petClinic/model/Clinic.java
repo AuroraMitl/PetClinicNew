@@ -46,12 +46,7 @@ public class Clinic {
     }
 
     public Client searchClient(String nameClient) {
-        for (Client client : clientsList) {
-            if (client.getName().equals(nameClient)) {
-                return client;
-            }
-        }
-        return null;
+        return this.clientsList.stream().filter(client -> client.getName().equals(nameClient)).findAny().orElse(null);
     }
 
     public void clientEdit(Client client, String name) {
@@ -65,10 +60,6 @@ public class Clinic {
         }
         return clientsListString.toString();
     }
-
-
-//4. зарефакторить вывод клиентов с петами, чтобы клиенты выводились по человечески и
-  //  в алфавитном порядке! а так же петы у клиентов так же чтобы были упорядочены (по типу пускай)
 
 
 }
