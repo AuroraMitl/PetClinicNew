@@ -41,14 +41,7 @@ public class Client {
                 .findAny()
                 .orElse(null);
 
-    /*  for (Pet pet : petsList) {
-            if (pet.getPetName().equals(petName)) {
-                return pet;
-            }
-        }
-        return null;
-    }
-*/
+
     }
     public String petsListToString() {
         StringBuilder stringPetsList = new StringBuilder();
