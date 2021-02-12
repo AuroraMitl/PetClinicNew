@@ -72,6 +72,13 @@ public class ConsoleUI {
                     System.out.println("До Свидания!");
                     break;
 
+                case "select_selectClientByPet":
+                    System.out.println("Введите имя животного:");
+                   petName = bufferedReader.readLine();
+                   client = clinic.searchClientByPet(petName);
+                    System.out.println("\nВыбрано животное " + petName + ".");
+                    System.out.println("\nХозяин животного " + client + ".");
+
                 case "select_client":
                     System.out.println("Введите имя клиента:");
                     clientName = bufferedReader.readLine();

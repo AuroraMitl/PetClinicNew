@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Client {
 
     private  String name;
-    private ArrayList<Pet> petsList = new ArrayList<>();
+    protected ArrayList<Pet> petsList = new ArrayList<>();
 
     public Client(String name) {
         this.name = name;
