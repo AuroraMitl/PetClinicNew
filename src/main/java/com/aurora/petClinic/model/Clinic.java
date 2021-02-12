@@ -1,17 +1,14 @@
 package com.aurora.petClinic.model;
 
-import com.aurora.petClinic.ConsoleUI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.stream.Collectors;
 
 public class Clinic {
   
-    private static Clinic instance;
-    private ArrayList<Client> clientsList = new ArrayList<>();
+    protected static Clinic instance;
+    protected ArrayList<Client> clientsList = new ArrayList<>();
 
-    private Clinic() {
+    protected Clinic() {
 
     }
   
@@ -47,6 +44,10 @@ public class Clinic {
 
     public Client searchClient(String nameClient) {
         return this.clientsList.stream().filter(client -> client.getName().equals(nameClient)).findAny().orElse(null);
+    }
+
+    public Client searchClientByPet (String petName) {
+        return null;
     }
 
     public void clientEdit(Client client, String name) {
