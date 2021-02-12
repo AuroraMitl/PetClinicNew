@@ -7,7 +7,8 @@ public class Clinic {
   
     protected static Clinic instance;
     protected ArrayList<Client> clientsList = new ArrayList<>();
-
+Client client;
+Pet pet;
     protected Clinic() {
 
     }
@@ -46,9 +47,18 @@ public class Clinic {
         return this.clientsList.stream().filter(client -> client.getName().equals(nameClient)).findAny().orElse(null);
     }
 
-    public Client searchClientByPet (String petName) {
-        return null;
-    }
+
+        public Client searchClientByPet (String petNameForSearch1) {
+            for (Client client : clientsList) {
+                for (Pet pet : client.petsList) {
+                    if (pet.getPetName().equals(petNameForSearch1)) {
+                        return client;
+                    }
+                }
+            }
+            return  null;
+        }
+
 
     public void clientEdit(Client client, String name) {
         client.setName(name);

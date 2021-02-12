@@ -51,4 +51,18 @@ class ClinicTest extends Clinic{
         Assertions.assertEquals(client2, clinic.searchClientByPet(petNameForSearch2));
         Assertions.assertNull(clinic.searchClientByPet(petNameForSearch3));
     }
+    @Test
+    void addClient() {
+        Client client1 = new Client("Тирания");
+        Client client2 = new Client("Бубоник");
+        resetClinic();
+        ArrayList<Client> testList = new ArrayList<Client>() {{
+add(client1);
+add(client2);
+        }};
+        Clinic clinic=Clinic.getInstance();
+        clinic.addClient(client1);
+        clinic.addClient(client2);
+        Assertions.assertEquals(testList, clinic.getClientsList());
+    }
 }
