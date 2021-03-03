@@ -1,4 +1,5 @@
 package com.aurora.petClinic;
+import com.aurora.petClinic.jdbcConnect.JdbcConnect;
 import com.aurora.petClinic.model.*;
 
 import java.io.BufferedReader;
@@ -27,8 +28,11 @@ public class ConsoleUI {
                 case "add_client":
                     System.out.println("Введите имя клиента:");
                     String clientName = bufferedReader.readLine();
-                    Client client = new Client(clientName);
-                    clinic.addClient(client);
+
+
+                   int clientId=JdbcConnect.addClient(clientName);
+                 Client client = new Client(clientName);
+                 //   clinic.addClient(client);
                     System.out.println("Создан клиент " + clientName);
                     System.out.println("Введите кличку животного:");
                     String petName = bufferedReader.readLine();
@@ -38,11 +42,14 @@ public class ConsoleUI {
                     switch (petType.toLowerCase()) {
                         case "cat":
                             Cat catName = new Cat(petName);
-                            client.addPet(catName);
+                           //addPet(catName);
+                           // JdbcConnect.addPet(petName,petType,clientId);
+                            JdbcConnect.addPet(petName,petType,clientId);
                             break;
                         case "dog":
                             Dog dogName = new Dog(petName);
                             client.addPet(dogName);
+
                             break;
                         default:
                             isPetAdded = false;
@@ -72,21 +79,23 @@ public class ConsoleUI {
                     System.out.println("До Свидания!");
                     break;
 
-                case "select_selectClientByPet":
+                case "select_clientByPet":
                     System.out.println("Введите имя животного:");
                    petName = bufferedReader.readLine();
-                   client = clinic.searchClientByPet(petName);
+                   clientName =JdbcConnect.searchClientByPet(petName);
                     System.out.println("\nВыбрано животное " + petName + ".");
-                    System.out.println("\nХозяин животного " + client + ".");
+                    System.out.println("\nХозяин животного " + clientName + ".");
+                  break;
 
                 case "select_client":
                     System.out.println("Введите имя клиента:");
                     clientName = bufferedReader.readLine();
-                    client = clinic.searchClient(clientName);
-                    if (client != null) {
+                    clientId=  JdbcConnect.getClientId(clientName);
+
+                    if (clientId > -1) {
                         boolean flagLayer2 = true;
                         while (flagLayer2) {
-                            System.out.println("\nВыбран клиент " + client.getName() + ".");
+                            System.out.println("\nВыбран клиент " + clientName + ".");
                             System.out.println("Введите одну из следующих команд:");
                             System.out.println("edit_client - изменить имя клиента;");
                             System.out.println("output - вывести список животных клиента;");
@@ -96,34 +105,40 @@ public class ConsoleUI {
                             System.out.println("exit - вернуться в главное меню.");
                             string = bufferedReader.readLine();
                             switch (string) {
-                                case "edit_client":
+                            /*    case "edit_client":
                                     System.out.println("Введите новое имя клиента");
                                     String clientNewName = bufferedReader.readLine();
-                                    clinic.clientEdit(client, clientNewName);
+                                   // clinic.clientEdit(client, clientNewName);
                                     System.out.println("Имя клиента " + clientName + " изменено на " + clientNewName);
                                     clientName = clientNewName;
                                     break;
-
-                                case "output":
+*/
+                              /*  case "output":
                                     if (client.getPetsList().size() > 0) {
                                         System.out.println(client.petsListToString());
                                     } else {
                                         System.out.println("Список животных пуст.");
                                     }
-                                    break;
+                                    break;*/
 
                                 case "add_pet":
                                     System.out.println("Введите кличку питомца:");
+
                                     petName = bufferedReader.readLine();
+
+
+
                                     System.out.println("Введите тип питомца:");
                                     petType = bufferedReader.readLine();
                                     isPetAdded = true;
                                     switch (petType.toLowerCase()) {
                                         case "cat":
-                                            client.addPet(new Cat(petName));
+                                           // client.addPet(new Cat(petName));
+                                            JdbcConnect.addPet(petName,petType,clientId);
                                             break;
                                         case "dog":
-                                            client.addPet(new Dog(petName));
+                                            //client.addPet(new Dog(petName));
+                                            JdbcConnect.addPet(petName,petType,clientId);
                                             break;
                                         default:
                                             isPetAdded = false;
@@ -134,7 +149,7 @@ public class ConsoleUI {
                                     }
                                     break;
 
-                                case "del_pet":
+                         /*       case "del_pet":
                                     System.out.println("Введите кличку питомца:");
                                     petName =  bufferedReader.readLine();
                                     Pet pet = client.searchPet(petName);
@@ -144,12 +159,25 @@ public class ConsoleUI {
                                     } else {
                                         System.out.println("Питомец не найден.");
                                     }
-                                    break;
+                                    break;*/
 
                                 case "del_client":
+
+
+
+                                    JdbcConnect.delClient(clientName);
+                                    System.out.println("Клиент "+clientName+" удален из списка");
+                                    flagLayer2 = false;
+
+
+/*
+
                                     clinic.delClient(client);
                                     System.out.println("Клиент "+clientName+" удален из списка");
                                     flagLayer2 = false;
+
+
+*/
                                     break;
 
                                 case "exit":
