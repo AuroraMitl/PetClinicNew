@@ -62,11 +62,12 @@ public class ConsoleUI {
                     break;
 
                 case "output":
-                    if (clinic.getClientsList().size() > 0) {
+                    /*if (clinic.getClientsList().size() > 0) {
                         System.out.println(clinic.clientsListToString());
                     } else {
                         System.out.println("Список клиентов пуст.");
-                    }
+                    }*/
+                    System.out.println(JdbcConnect.getAllClients());
                     break;
 
                 //output alphabet, checking, commit, why it isnt used??

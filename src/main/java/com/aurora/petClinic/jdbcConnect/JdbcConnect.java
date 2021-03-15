@@ -1,6 +1,10 @@
 package com.aurora.petClinic.jdbcConnect;
 
+import com.aurora.petClinic.model.Client;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JdbcConnect {
     private static String url = "jdbc:postgresql://10.15.16.1:5432/PetClinic";
@@ -36,6 +40,8 @@ public class JdbcConnect {
 
         try (Connection con = DriverManager.getConnection(url, login, password);
 
+
+
              PreparedStatement preStat = con.prepareStatement((query), new String[] {"client_id"}))  {
             preStat.setString(1, clientName);
             preStat.executeUpdate();
@@ -44,21 +50,37 @@ public class JdbcConnect {
               int clientId = resultSet.getInt("client_id");
                return clientId;
             }
-        //    ResultSet gk = preStat.getGeneratedKeys();
 
-        //    System.out.println(gk);
-        //    if(gk.next()) {
-                // Получаем поле contact_id
-            //   int clientId = gk.getInt("contact_id");
-             //   return   clientId;
-           // }
-
-       // }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
    return -1;
     }
+
+    public static List<Client> getAllClients() throws ClassNotFoundException, SQLException {
+        String query = "SELECT name FROM clients";
+        List<Client> clientsList=new ArrayList<>();
+
+        Class.forName("org.postresql.Driver");
+        try(Connection con=DriverManager.getConnection(url, login, password);
+        PreparedStatement preStat=con.prepareStatement(query)){
+            ResultSet resultSet=preStat.executeQuery();
+        while(resultSet.next()){
+            String clientName=resultSet.getString("name");
+            clientsList.add(new Client(clientName));
+        }
+            return clientsList;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
+
+
+
 
 public static void addPet(String petName,String petType,int clientId) {
     //PreparedStatement stmt = con.prepareStatement("INSERT INTO jc_contact (first_name, last_name, phone, email) VALUES (?, ?, ?, ?)", new String[] {"contact_id"});
