@@ -11,13 +11,12 @@ public class JdbcConnect {
     private static String login = "petpguser";
     private static String password = "javasucks";
     // public static final String DB_URL = "jdbc:postgresql://localhost:5432/PetClinic " ;
-    // public static final String DB_Driver = "D.learning.PetClinic.lib.";
-/*
+    public static final String DB_Driver = "org.postgresql.Driver";
     public static void main(String[] args) {
         try {
             Class.forName(DB_Driver);
 //Проверяем наличие JDBC драйвера для работы с БД
-            Connection connection = DriverManager.getConnection(DB_URL);
+            Connection connection = DriverManager.getConnection(url, login, password);
 //соединениесБД
             System.out.println("Соединение с СУБД выполнено.");
             connection.close();
@@ -32,7 +31,7 @@ public class JdbcConnect {
 // обработка ошибок  DriverManager.getConnection
             System.out.println("Ошибка SQL !");
         }
-    }*/
+    }
 
     public static Integer addClient(String clientName) {
 
