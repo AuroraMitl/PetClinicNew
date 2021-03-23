@@ -106,14 +106,14 @@ public class ConsoleUI {
                             System.out.println("exit - вернуться в главное меню.");
                             string = bufferedReader.readLine();
                             switch (string) {
-                            /*    case "edit_client":
+                            case "edit_client":
                                     System.out.println("Введите новое имя клиента");
                                     String clientNewName = bufferedReader.readLine();
                                    // clinic.clientEdit(client, clientNewName);
                                     System.out.println("Имя клиента " + clientName + " изменено на " + clientNewName);
                                     clientName = clientNewName;
                                     break;
-*/
+
                               /*  case "output":
                                     if (client.getPetsList().size() > 0) {
                                         System.out.println(client.petsListToString());

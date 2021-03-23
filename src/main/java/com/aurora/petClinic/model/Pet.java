@@ -21,7 +21,7 @@ public abstract class Pet {
         this.id=id;
     }
 
-    String getPetName() {
+    public String getPetName() {
         return petName;
     }
 

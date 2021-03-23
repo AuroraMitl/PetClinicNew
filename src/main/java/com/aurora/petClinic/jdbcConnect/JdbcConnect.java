@@ -1,6 +1,9 @@
 package com.aurora.petClinic.jdbcConnect;
 
+import com.aurora.petClinic.model.Cat;
 import com.aurora.petClinic.model.Client;
+import com.aurora.petClinic.model.Dog;
+import com.aurora.petClinic.model.Pet;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -39,8 +42,6 @@ public class JdbcConnect {
 
         try (Connection con = DriverManager.getConnection(url, login, password);
 
-
-
              PreparedStatement preStat = con.prepareStatement((query), new String[] {"client_id"}))  {
             preStat.setString(1, clientName);
             preStat.executeUpdate();
@@ -49,7 +50,6 @@ public class JdbcConnect {
               int clientId = resultSet.getInt("client_id");
                return clientId;
             }
-
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -60,7 +60,7 @@ public class JdbcConnect {
         String query = "SELECT name FROM clients";
         List<Client> clientsList=new ArrayList<>();
 
-        Class.forName("org.postresql.Driver");
+        Class.forName("org.postgresql.Driver");
         try(Connection con=DriverManager.getConnection(url, login, password);
         PreparedStatement preStat=con.prepareStatement(query)){
             ResultSet resultSet=preStat.executeQuery();
@@ -76,8 +76,25 @@ public class JdbcConnect {
     }
 
 
+    public static List<Pet> getAllPets() throws ClassNotFoundException, SQLException {
+        String query = "SELECT name FROM pets";
+        List<Pet> petsList=new ArrayList<>();
 
-
+        Class.forName("org.postgresql.Driver");
+        try(Connection con=DriverManager.getConnection(url, login, password);
+            PreparedStatement preStat=con.prepareStatement(query)){
+            ResultSet resultSet=preStat.executeQuery();
+            while(resultSet.next()){
+                String petName=resultSet.getString("name");
+               petsList.add(new Cat(petName));
+                petsList.add(new Dog(petName));
+            }
+            return petsList;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 
@@ -117,6 +134,87 @@ public static void addPet(String petName,String petType,int clientId) {
         return null;
     }
 
+    public  static List<Pet> getPetByClient (String clientNameForSearch) throws ClassNotFoundException {
+        String query="SELECT  pets.name , pets.type FROM clients,pets WHERE clients.client_id = pets.client_id AND clients.name=? ";
+        List<Pet> petsList=new ArrayList<>();
+        String petType = "";
+        Class.forName("org.postgresql.Driver");
+        try (Connection con = DriverManager.getConnection(url, login, password);
+             PreparedStatement preStat = con.prepareStatement(query)) {
+            preStat.setString(1, clientNameForSearch);
+
+            preStat.executeQuery();
+            ResultSet resultSet = preStat.getResultSet();
+            if (resultSet.next()) {
+                String petName= resultSet.getString("name");
+            if(petType.equalsIgnoreCase("dog")) {
+                  petsList.add(new Dog(petName));
+           }else if(petType.equalsIgnoreCase("cat")) {
+                 petsList.add(new Cat(petName));
+              }
+                return petsList;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+
+    public  static String searchClient (String clientNameForSearch){
+        String query="SELECT  clients.name FROM clients WHERE name=?";
+
+        try (Connection con = DriverManager.getConnection(url, login, password);
+             PreparedStatement preStat = con.prepareStatement(query)) {
+            preStat.setString(1, clientNameForSearch);
+
+            preStat.executeQuery();
+            ResultSet resultSet = preStat.getResultSet();
+            if (resultSet.next()) {
+                String clientName= resultSet.getString("name");
+
+                return clientName;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+
+    public static String editClient (String clientNameForEdit){
+
+        searchClient(clientNameForEdit);
+
+        String query = "UPDATE name INTO clients (name) VALUES(?)";
+
+        //= "UPDATE actor "
+                //+ "SET last_name = ? "
+                //+ "WHERE actor_id = ?";
+
+
+        try (Connection con = DriverManager.getConnection(url, login, password);
+
+             PreparedStatement preStat = con.prepareStatement((query), new String[] {"client_id"}))  {
+            preStat.setString(1, clientNameForEdit);
+            preStat.executeUpdate();
+            ResultSet resultSet = preStat.getGeneratedKeys();
+            if (resultSet.next()) {
+                String clientName= resultSet.getString("name");
+
+                return clientName;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+
 
 
     public static int getClientId(String clientName) {
@@ -142,7 +240,7 @@ public static void addPet(String petName,String petType,int clientId) {
 
     public static void delClient(String clientName) {
 
-        String query = "DELETE FROM clients WHERE (name) VALUES(?)";
+        String query = "DELETE FROM clients  WHERE name= ?";
         try (Connection con = DriverManager.getConnection(url, login, password);
              PreparedStatement preStat = con.prepareStatement(query)) {
             preStat.setString(1, clientName);
