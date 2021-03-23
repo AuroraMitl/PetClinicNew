@@ -91,7 +91,6 @@ public class ClientServlet extends HttpServlet {
               e.printStackTrace();
           }
           for (Pet pet : petsList) {
-              //    String clientNameForSearch;
 
               writer.println(pet.getPetName());
 
