@@ -10,23 +10,23 @@ package com.aurora.petClinic.model;
  */
 public abstract class Pet {
 
-    String petName;
-    String petType;
-    int id;
+    private String petName;
+    private int id;
 
-    public Pet(String petName){
+    Pet(String petName) {
         this.petName=petName;
-
     }
 
-    public Pet(int id){
+    Pet(int id) {
         this.id=id;
-
     }
+
+    public String getPetName() {
+        return petName;
+    }
+
     @Override
     public String toString() {
-        return "Pet [кличка животного=" + petName
-                + "]";
+        return "Кличка: " + petName;
     }
-
 }

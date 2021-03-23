@@ -1,42 +1,78 @@
 package com.aurora.petClinic.model;
 
-
-import com.aurora.petClinic.ConsoleUI;
-
-
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Clinic {
+  
+    protected static Clinic instance;
+    protected ArrayList<Client> clientsList = new ArrayList<>();
+Client client;
+Pet pet;
+    protected Clinic() {
 
-    ConsoleUI consoleUI=new ConsoleUI();
-    Client client =new Client();
+    }
+  
+    public static Clinic getInstance() {
 
-    ArrayList<Client> clientsList = new ArrayList<Client>();
+        if(instance == null) {		//если объект еще не создан, то создаем
+                instance = new Clinic();	 //создать новый объект, если слишком надо
+        }
+        return instance;		// вернуть созданный объект
+    }
 
     public ArrayList<Client> getClientsList() {
         return clientsList;
     }
 
+    public ArrayList<Client> sortClientList() {
+        clientsList.sort(Comparator.comparing(Client::getName));
+        return clientsList;
+    }
+
+
     public void setClientsList(ArrayList<Client> clientsList) {
         this.clientsList = clientsList;
     }
 
-    public  void addClient(Client client) {
+    public void addClient(Client client) {
         this.clientsList.add(client);
     }
 
-    public Client searchClient(String nameClient) {
-        for (Client client : clientsList) {
-            if (client.getName().equals(nameClient)) {
-                return client;
-            }
-        }
-        return null;
+    public void delClient (Client client) {
+        this.clientsList.remove(client);
     }
-    public void clientListOutput(){
-        System.out.println(getClientsList());
 
+    public Client searchClient(String nameClient) {
+        return this.clientsList.stream().filter(client -> client.getName().equals(nameClient)).findAny().orElse(null);
     }
+
+
+        public Client searchClientByPet (String petNameForSearch1) {
+            for (Client client : clientsList) {
+                for (Pet pet : client.petsList) {
+                    if (pet.getPetName().equals(petNameForSearch1)) {
+                        return client;
+                    }
+                }
+            }
+            return  null;
+        }
+
+
+    public void clientEdit(Client client, String name) {
+        client.setName(name);
+    }
+
+    public String clientsListToString() {
+        StringBuilder clientsListString = new StringBuilder();
+        for (Client client : clientsList) {
+            clientsListString.append("\n").append(client.toString());
+        }
+        return clientsListString.toString();
+    }
+
+
 }
 
 

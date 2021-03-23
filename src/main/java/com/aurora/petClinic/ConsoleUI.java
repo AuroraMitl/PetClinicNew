@@ -1,83 +1,204 @@
 package com.aurora.petClinic;
-
-import com.aurora.petClinic.model.Cat;
-import com.aurora.petClinic.model.Client;
-import com.aurora.petClinic.model.Clinic;
-import com.aurora.petClinic.model.Dog;
+import com.aurora.petClinic.jdbcConnect.JdbcConnect;
+import com.aurora.petClinic.model.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class ConsoleUI {
 
-
-
-
     public static void main(String []args) throws Exception {
 
-        Clinic clinic = new Clinic();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        Clinic clinic =  Clinic.getInstance();
 
-        // Client client=new Client();
+        System.out.println("Здравствуйте! Мы рады Вас приветствовать в нашей клинике!");
+        boolean flagLayer1 = true;
+        while (flagLayer1) {
+            System.out.println("\nВведите одну из следующих команд:");
+            System.out.println("add_client - добавить нового клиента и его питомца;");
+            System.out.println("select_client - выбрать существующего клиента для работы с ним;");
+            System.out.println("output - вывести список всех клиентов и их питомцев;");
+            System.out.println("exit - завершить работу с программой.");
 
-        System.out.println("Здравствуйте! Мы рады Вас приветствовать в нашей клинике!\nЕсли Вы хотите записаться на прием со своим питомцем, то введите команду :");
-        boolean flag=true;
-        while(flag) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
             String string = bufferedReader.readLine();
-            switch (string){
-                case ("exit"):
-                    flag=false;
-                    System.out.println("До Свидания!");
-                    break;
+            switch (string) {
+
+                case "add_client":
+                    System.out.println("Введите имя клиента:");
+                    String clientName = bufferedReader.readLine();
 
 
-                case ("add_client"):
-                    System.out.println("Введите имя клиента: ");
-                    String  nameClient = bufferedReader.readLine();
-                    Client client=new Client(nameClient);
-                    clinic.addClient(client);
-                    System.out.println("Введите кличку животного: ");
-                    String namePet = bufferedReader.readLine();
-                    System.out.println("Введите тип питомца : cat, dog or cow");
+                   int clientId=JdbcConnect.addClient(clientName);
+                 Client client = new Client(clientName);
+                 //   clinic.addClient(client);
+                    System.out.println("Создан клиент " + clientName);
+                    System.out.println("Введите кличку животного:");
+                    String petName = bufferedReader.readLine();
+                    System.out.println("Введите тип питомца : cat, dog");
                     String petType = bufferedReader.readLine();
-                    if (petType.equals("cat")) {
-                        Cat catName = new Cat(namePet);
-                        client.addPet(catName);
-                    } else if (petType.equals("dog")) {
-                        Dog dogName = new Dog(namePet);
-                        client.addPet(dogName);
+                    boolean isPetAdded = true;
+                    switch (petType.toLowerCase()) {
+                        case "cat":
+                            Cat catName = new Cat(petName);
+                           //addPet(catName);
+                           // JdbcConnect.addPet(petName,petType,clientId);
+                            JdbcConnect.addPet(petName,petType,clientId);
+                            break;
+                        case "dog":
+                            Dog dogName = new Dog(petName);
+                            client.addPet(dogName);
+
+                            break;
+                        default:
+                            isPetAdded = false;
+                            System.out.println("Неизвестный тип. Добавление животного не произведено.");
                     }
-                    flag = true;
-
-                    System.out.println("Добавлен клиент "+nameClient+" c "+ petType+" "+namePet); //TODO add to SLF4J
-                    break;
-
-
-                case "search_client":
-                    System.out.println("Введите имя клиента для поиска");
-                    client = clinic.searchClient(bufferedReader.readLine());
-
-                    //clinic.searchClient(bufferedReader.readLine());
-
-                    if( client==null){
-                        System.out.println("Клиента нет в списке");
+                    if (isPetAdded) {
+                        System.out.println("Клиенту " + clientName + " добавлен " + petType + " по кличке " + petName);
                     }
-                    else{
-                        System.out.println("Клиент есть в списке");
-                        System.out.println(client);
-                    }
-
+                    //System.out.println("Добавлен клиент " + nameClient + " c " + petType + " " + namePet); //TODO add to SLF4J
                     break;
 
                 case "output":
-                    clinic.clientListOutput();
+                    /*if (clinic.getClientsList().size() > 0) {
+                        System.out.println(clinic.clientsListToString());
+                    } else {
+                        System.out.println("Список клиентов пуст.");
+                    }*/
+                    System.out.println(JdbcConnect.getAllClients());
+                    break;
+
+                //output alphabet, checking, commit, why it isnt used??
+                case "outputSort":
+                    System.out.println(clinic.sortClientList());
+                    break;
+
+                case "exit":
+                    flagLayer1 = false;
+                    System.out.println("До Свидания!");
+                    break;
+
+                case "select_clientByPet":
+                    System.out.println("Введите имя животного:");
+                   petName = bufferedReader.readLine();
+                   clientName =JdbcConnect.searchClientByPet(petName);
+                    System.out.println("\nВыбрано животное " + petName + ".");
+                    System.out.println("\nХозяин животного " + clientName + ".");
+                  break;
+
+                case "select_client":
+                    System.out.println("Введите имя клиента:");
+                    clientName = bufferedReader.readLine();
+                    clientId=  JdbcConnect.getClientId(clientName);
+
+                    if (clientId > -1) {
+                        boolean flagLayer2 = true;
+                        while (flagLayer2) {
+                            System.out.println("\nВыбран клиент " + clientName + ".");
+                            System.out.println("Введите одну из следующих команд:");
+                            System.out.println("edit_client - изменить имя клиента;");
+                            System.out.println("output - вывести список животных клиента;");
+                            System.out.println("add_pet - добавить нового питомца клиенту;");
+                            System.out.println("del_pet - удаладить питомца у клиента;");
+                            System.out.println("del_client - удалить клиента;");
+                            System.out.println("exit - вернуться в главное меню.");
+                            string = bufferedReader.readLine();
+                            switch (string) {
+                            case "edit_client":
+                                    System.out.println("Введите новое имя клиента");
+                                    String clientNewName = bufferedReader.readLine();
+                                   // clinic.clientEdit(client, clientNewName);
+                                    System.out.println("Имя клиента " + clientName + " изменено на " + clientNewName);
+                                    clientName = clientNewName;
+                                    break;
+
+                              /*  case "output":
+                                    if (client.getPetsList().size() > 0) {
+                                        System.out.println(client.petsListToString());
+                                    } else {
+                                        System.out.println("Список животных пуст.");
+                                    }
+                                    break;*/
+
+                                case "add_pet":
+                                    System.out.println("Введите кличку питомца:");
+
+                                    petName = bufferedReader.readLine();
+
+
+
+                                    System.out.println("Введите тип питомца:");
+                                    petType = bufferedReader.readLine();
+                                    isPetAdded = true;
+                                    switch (petType.toLowerCase()) {
+                                        case "cat":
+                                           // client.addPet(new Cat(petName));
+                                            JdbcConnect.addPet(petName,petType,clientId);
+                                            break;
+                                        case "dog":
+                                            //client.addPet(new Dog(petName));
+                                            JdbcConnect.addPet(petName,petType,clientId);
+                                            break;
+                                        default:
+                                            isPetAdded = false;
+                                            System.out.println("Неизвестный тип. Добавление животного не произведено.");
+                                    }
+                                    if (isPetAdded) {
+                                        System.out.println("Клиенту " + clientName + " добавлен " + petType + " по кличке " + petName);
+                                    }
+                                    break;
+
+                         /*       case "del_pet":
+                                    System.out.println("Введите кличку питомца:");
+                                    petName =  bufferedReader.readLine();
+                                    Pet pet = client.searchPet(petName);
+                                    if (pet != null) {
+                                        client.delPet(pet);
+                                        System.out.println("Питомец " + petName + " у клиента " + clientName + " удален.");
+                                    } else {
+                                        System.out.println("Питомец не найден.");
+                                    }
+                                    break;*/
+
+                                case "del_client":
+
+
+
+                                    JdbcConnect.delClient(clientName);
+                                    System.out.println("Клиент "+clientName+" удален из списка");
+                                    flagLayer2 = false;
+
+
+/*
+
+                                    clinic.delClient(client);
+                                    System.out.println("Клиент "+clientName+" удален из списка");
+                                    flagLayer2 = false;
+
+
+*/
+                                    break;
+
+                                case "exit":
+                                    flagLayer2 = false;
+                                    break;
+
+                                default:
+                                    System.out.println("Мы не поняли что вы имеете ввиду, повторите ввод.");
+                            }
+                        }
+                    } else {
+                        System.out.println("Клиента нет в списке.");
+                    }
                     break;
 
                 default:
-                    System.out.println("Мы не поняли что вы имеете ввиду");
-
+                    System.out.println("Мы не поняли что вы имеете ввиду, повторите ввод.");
             }
         }
     }
 }
+
 
