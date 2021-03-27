@@ -135,9 +135,11 @@ public static void addPet(String petName,String petType,int clientId) {
     }
 
     public  static List<Pet> getPetByClient (String clientNameForSearch) throws ClassNotFoundException {
-        String query="SELECT  pets.name , pets.type FROM clients,pets WHERE clients.client_id = pets.client_id AND clients.name=? ";
+      String query="SELECT  pets.name , pets.type FROM clients,pets WHERE clients.client_id = pets.client_id AND clients.name=? ";
+      //  String query="SELECT  pets.name FROM clients,pets WHERE clients.client_id = pets.client_id AND clients.name=? ";
+
         List<Pet> petsList=new ArrayList<>();
-        String petType = "";
+
         Class.forName("org.postgresql.Driver");
         try (Connection con = DriverManager.getConnection(url, login, password);
              PreparedStatement preStat = con.prepareStatement(query)) {
@@ -145,17 +147,22 @@ public static void addPet(String petName,String petType,int clientId) {
 
             preStat.executeQuery();
             ResultSet resultSet = preStat.getResultSet();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
+
                 String petName= resultSet.getString("name");
-            if(petType.equalsIgnoreCase("dog")) {
+                String petType=resultSet.getString("type");
+
+                if(petType.equalsIgnoreCase("dog")) {
                   petsList.add(new Dog(petName));
+
            }else if(petType.equalsIgnoreCase("cat")) {
-                 petsList.add(new Cat(petName));
+                petsList.add(new Cat(petName));
               }
-                return petsList;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+
+            }return petsList;
+
+    }catch (SQLException ex) {
+           ex.printStackTrace();
         }
         return null;
     }

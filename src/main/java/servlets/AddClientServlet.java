@@ -31,6 +31,7 @@ public class AddClientServlet extends HttpServlet {
         String name = request.getParameter("clientName");
         JdbcConnect.addClient(name);
         response.sendRedirect("/clients");
+
     }
 
 

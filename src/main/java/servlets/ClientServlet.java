@@ -1,5 +1,6 @@
 package servlets;
 
+
 import com.aurora.petClinic.jdbcConnect.JdbcConnect;
 import com.aurora.petClinic.model.Client;
 import com.aurora.petClinic.model.Pet;
@@ -41,11 +42,10 @@ public class ClientServlet extends HttpServlet {
         List<Pet> petsList = new ArrayList<>();
         try {
             clientsList = JdbcConnect.getAllClients();
-
-
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
+
         response.setContentType("text/html");
         PrintWriter writer = response.getWriter();
         writer.println("<head>\n" +
@@ -58,73 +58,75 @@ public class ClientServlet extends HttpServlet {
                 "\n" +
                 "\t<title>Manager Directory</title>\n" +
                 "</head>");
-        writer.println("Hello our guests and their pets");
-
+        writer.println("There will be List of All clients...");
         writer.println("<body>");
 
-       // String cssTag="<link rel='stylesheet' type='text/css' href='css/style.css'>";
         writer.println("<table class=\"table table-bordered table-striped\">");
         writer.println("<thead class=\"thead-dark\">");
         writer.println("<tr>\n" +
                 "\t\t\t\t<th style=\"padding: 4px\">Client Name</th>\n" +
+                "\t\t\t\t<th style=\"padding: 4px\">Pets name</th>\n" +
+                "\t\t\t\t<th style=\"padding: 4px\">Edition</th>\n" +
                 "\t\t\t</tr>");
-        writer.println("</thead>");
+        //  writer.println("</thead>");
 
+        writer.println("<td>");
+        writer.println("<div>");
+        writer.println("<a href=\"/clients/addClient\" class=\"btn btn-primary btn-sm mb-3\">");
+        writer.println("Add client");
+        writer.println("</a>");
+        writer.println("</div>");
+        writer.println("</td>");
         writer.println("<tbody>");
 
+        for (Client client : clientsList) {
+            writer.println("<tr>");
+            writer.println("<td style=\"padding: 10px\">");
+            writer.println(client.getName());
+            writer.println("</td>");
 
-      for (Client client : clientsList) {
+            try {
 
-          writer.println("<link href='style.css' rel='stylesheet' type='text/css'/>");
-          writer.println("<table class=\"table table-bordered table-striped\">");
-          writer.println("<div>");
-          writer.println("<tr>");
-          writer.println("<td>");
-          writer.println(client.getName());
+                petsList = JdbcConnect.getPetByClient(client.getName());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            writer.println("<td>");
+            //writer.println("когда я выйду отсюда!?");
+            if ((petsList == null) || (petsList.isEmpty())) {
+                writer.println("There is no pet");
+            } else {
+                for (Pet pet : petsList) {
+                    // writer.println("петы");
 
-          writer.println("</td>");
+                    writer.println(pet.getPetName());
+                    writer.println("<br>");
+                }
+            }
+            writer.println("</td>");
 
-          writer.println("<td>");
-          try {
-              petsList = JdbcConnect.getPetByClient(client.getName());
-          } catch (ClassNotFoundException e) {
-              e.printStackTrace();
-          }
-          for (Pet pet : petsList) {
+            writer.println("<td>");
+            writer.println("<div>");
+            writer.println("<a href=\"/clients/deleteClient\" class=\"btn btn-primary btn-sm mb-3\">");
+            writer.println("Delete client");
+            writer.println("</a>");
+            writer.println("</div>");
 
-              writer.println(pet.getPetName());
+            writer.println("<div>");
+            writer.println("<a href=\"/clients/deleteClient\" class=\"btn btn-primary btn-sm mb-3\">");
+            writer.println("Edit client");
+            writer.println("</a>");
+            writer.println("</div>");
+            writer.println("</td>");
 
-          }
-          writer.println("</td>");
-              writer.println("<td>");
-              // writer.println("<div class='tabl'>");
-
-              writer.println("<a href=\"/clients/deleteClient\" class=\"btn btn-primary btn-sm mb-3\">");
-              writer.println("Delete client");
-              writer.println("</a>");
-              writer.println("<a href=\"/clients/editClient\" class=\"btn btn-primary btn-sm mb-3\">");
-              writer.println("Edit client");
-              writer.println("</a>");
-              writer.println("</div>");
-              writer.println("</td>");
-              // writer.println("</div>");
-
-              writer.println("</tr>");
-              writer.println("</table >");
-
-      }
-    writer.println("</tbody>");
-    writer.println("</thead>");
-    writer.println("</table>");
-    writer.println("</body>");
+            writer.println("</tr>");
+        }
+        writer.println("</tbody>");
+        writer.println("</thead>");
+        writer.println("</table>");
+        writer.println("</body>");
+    }
 }
-
-
-}
-
-
-
-
 
 
 
