@@ -18,6 +18,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @WebServlet("/clients")
 
 public class ClientServlet extends HttpServlet {
@@ -107,15 +108,26 @@ public class ClientServlet extends HttpServlet {
 
             writer.println("<td>");
             writer.println("<div>");
-            writer.println("<a href=\"/clients/deleteClient\" class=\"btn btn-primary btn-sm mb-3\">");
-            writer.println("Delete client");
-            writer.println("</a>");
+
+
+            writer.println("<form action=\"/clients/deleteClient\" method=\"post\">");
+            writer.println ("<input type=\"hidden\" name=\"clientName\" value=\""+client.getName()+"\"/>");
+
+            writer.println( "<input type=\"submit\" value=\"Delete\" class=\"btn btn-primary btn-sm \">");
+            writer.println("</form>");
+
             writer.println("</div>");
 
+            writer.println("<form action=\"/clients/editClient\" method=\"get\">");
+            writer.println ("<input type=\"hidden\" name=\"clientNameForEdit\" value=\""+client.getName()+"\"/>");
+
+            writer.println( "<input type=\"submit\" value=\"Edit\" class=\"btn btn-primary btn-sm \">");
+            writer.println("</form>");
+
+
             writer.println("<div>");
-            writer.println("<a href=\"/clients/deleteClient\" class=\"btn btn-primary btn-sm mb-3\">");
-            writer.println("Edit client");
-            writer.println("</a>");
+
+
             writer.println("</div>");
             writer.println("</td>");
 

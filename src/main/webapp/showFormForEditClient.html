@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <title>Delete Client</title>
+    <title>Edit Client</title>
 </head>
 
 <body>
 <div class="container">
-    <h3>Delete client</h3>
+    <h3>Edit client</h3>
     <hr>
-    <p class="h4 mb-4">Delete client</p>
-    <form action="deleteClient" method="POST">
-        Client name<input type="text" name="clientName" placeholder="Client name">
-        <button type="submit">Delete</button>
+    <p class="h4 mb-4">Edit client</p>
+    <form action="editClient" method="POST">
+        Client name<input type="text" name="clientNewName" placeholder="Client name">
+        <button type="submit">Edit</button>
     </form>
     <hr>
     <a href="/clients">Back to client's list</a>

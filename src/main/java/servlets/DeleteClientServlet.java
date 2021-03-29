@@ -21,7 +21,7 @@ public class DeleteClientServlet extends HttpServlet {
 
 
    // protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-      //  String path = "/showFormForDeleteClient.html";
+      //  String path = "/showFormForEditClient.html";
       //  ServletContext servletContext = getServletContext();
         //RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(path);
         //requestDispatcher.forward(request, response);
@@ -29,7 +29,11 @@ public class DeleteClientServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String name = request.getParameter("clientName");
-        JdbcConnect.delClient(name);
+        try {
+            JdbcConnect.delClient(name);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         response.sendRedirect("/clients");
     }
 

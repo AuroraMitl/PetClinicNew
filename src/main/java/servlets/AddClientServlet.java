@@ -29,7 +29,9 @@ public class AddClientServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String name = request.getParameter("clientName");
-        JdbcConnect.addClient(name);
+        String petName = request.getParameter("petName");
+        //JdbcConnect.addClient(name);
+        JdbcConnect.addPet(petName,"dog",JdbcConnect.addClient(name));
         response.sendRedirect("/clients");
 
     }

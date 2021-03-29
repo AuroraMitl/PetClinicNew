@@ -170,9 +170,9 @@ public static void addPet(String petName,String petType,int clientId) {
 
 
 
-    public  static String searchClient (String clientNameForSearch){
+    public  static String searchClient (String clientNameForSearch) throws ClassNotFoundException {
         String query="SELECT  clients.name FROM clients WHERE name=?";
-
+        Class.forName("org.postgresql.Driver");
         try (Connection con = DriverManager.getConnection(url, login, password);
              PreparedStatement preStat = con.prepareStatement(query)) {
             preStat.setString(1, clientNameForSearch);
@@ -193,32 +193,26 @@ public static void addPet(String petName,String petType,int clientId) {
 
 
 
-    public static String editClient (String clientNameForEdit){
+    public static void editClient (String clientNameForEdit, String clientNewName) throws ClassNotFoundException {
 
         searchClient(clientNameForEdit);
 
-        String query = "UPDATE name INTO clients (name) VALUES(?)";
+        String query = "UPDATE clients SET name= ? WHERE name=?";
 
-        //= "UPDATE actor "
-                //+ "SET last_name = ? "
-                //+ "WHERE actor_id = ?";
-
+        Class.forName("org.postgresql.Driver");
 
         try (Connection con = DriverManager.getConnection(url, login, password);
 
              PreparedStatement preStat = con.prepareStatement((query), new String[] {"client_id"}))  {
-            preStat.setString(1, clientNameForEdit);
+            preStat.setString(1, clientNewName);
+            preStat.setString(2, clientNameForEdit);
             preStat.executeUpdate();
-            ResultSet resultSet = preStat.getGeneratedKeys();
-            if (resultSet.next()) {
-                String clientName= resultSet.getString("name");
 
-                return clientName;
-            }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return null;
+
     }
 
 
@@ -245,10 +239,27 @@ public static void addPet(String petName,String petType,int clientId) {
 
 
 
-    public static void delClient(String clientName) {
-
+    public static void delClient(String clientName) throws ClassNotFoundException {
         String query = "DELETE FROM clients  WHERE name= ?";
+        Class.forName("org.postgresql.Driver");
         try (Connection con = DriverManager.getConnection(url, login, password);
+             PreparedStatement preStat = con.prepareStatement(query)) {
+             preStat.setString(1, clientName);
+           delPet(clientName);
+            preStat.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    public static void delPet(String clientName) throws ClassNotFoundException {
+
+        String query = "DELETE FROM pets WHERE client_id IN " +
+                "(SELECT client_id FROM clients WHERE name = ?)";
+        Class.forName("org.postgresql.Driver");
+        try (Connection con = DriverManager.getConnection(url, login, password);
+
              PreparedStatement preStat = con.prepareStatement(query)) {
             preStat.setString(1, clientName);
             preStat.executeUpdate();
